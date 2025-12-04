@@ -2,6 +2,11 @@
   <div class="home">
     <h1>Kodu vaade</h1>
   </div>
+
+
+
+
+
 </template>
 
 <script>

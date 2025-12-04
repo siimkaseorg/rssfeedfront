@@ -5,7 +5,7 @@
     <input class="form-check-input" type="checkbox" value="" id="checkDefault">
     <label class="form-check-label" for="checkDefault">
       Default checkbox
-    </label:
+    </label>
   </div>
 
   <div class="form-check">

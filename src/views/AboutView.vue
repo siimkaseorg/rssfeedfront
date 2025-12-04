@@ -1,5 +1,11 @@
 <template>
+  <div class="home">
+    <img alt="Vue logo" src="../assets/images/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  </div>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h3>Siin kuvatakse sinu valitud kategooriaga uudised</h3>
   </div>
 </template>
+<script setup lang="ts">
+</script>

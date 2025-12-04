@@ -1,4 +1,5 @@
 <template>
+
   <nav>
     <router-link to="/">Kõik uudised</router-link> |
     <router-link to="/about">Minu voog</router-link>
@@ -27,4 +28,7 @@ nav a {
 nav a.router-link-exact-active {
   color: #009bff;
 }
+
+
+
 </style>

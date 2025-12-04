@@ -2,7 +2,6 @@
   <div class="home">
     <h1>Kodu vaade</h1>
   </div>
-
   <div class="row justify-content-center">
     <div class="col col-2">
       <CategoriesTypesCheckbox :categories/>
@@ -19,6 +18,20 @@ import CategoriesTypesCheckbox from "@/components/categories/CategoriesTypesChec
 
 export default {
   name: 'HomeView',
-  components: {CategoriesTypesCheckbox}
+  components: {CategoriesTypesCheckbox},
+  data() {
+    return {
+
+      categories: [
+        {
+          categoryId: 0,
+          categoryName: '',
+          categoryIsChosen: true
+        }
+
+      ]
+
+    }
+  },
 }
 </script>

@@ -1,9 +1,16 @@
 <template>
 
-  <h4>Kõik kategooriad</h4>
 
+  <div class="form-check">
+    <input @change="updateAllCategories($event.target.checked)" class="form-check-input" type="checkbox" checked>
+    <label class="form-check-label" >
+      Kõik kategooriad
+    </label>
+  </div>
+
+  <hr>
   <div v-for="category in categories" :key="category.categoryId" class="form-check">
-    <input @change="categoryCheckChanged(category.categoryId, $event.target.checked)" class="form-check-input" type="checkbox" :checked="category.categoryIsChosen">
+    <input @change="updateCategory(category.categoryId, $event.target.checked)" class="form-check-input" type="checkbox" :checked="category.categoryIsChosen">
     <label class="form-check-label" >
       {{ category.categoryName }}
     </label>
@@ -21,14 +28,19 @@ export default {
     return {}
   },
   methods: {
-    categoryCheckChanged(categoryId, categoryIsChosen) {
 
-      const categoryCheckboxChangeInfo = {
+    updateCategory(categoryId, categoryIsChosen) {
+      const updatedCategory = {
         categoryId: categoryId,
         categoryIsChosen: categoryIsChosen
       }
 
-      this.$emit('event-category-checkbox-state-changed', categoryCheckboxChangeInfo)
+      this.$emit('event-category-updated', updatedCategory)
+    },
+
+    updateAllCategories(categoriesAreChosen) {
+      this.$emit('event-categories-updated', categoriesAreChosen)
+
     },
   },
   mounted() {

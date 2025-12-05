@@ -5,7 +5,8 @@
   <div class="row justify-content-center">
     <div class="col col-2">
       <CategoriesTypesCheckbox :categories="categories"
-                               @event-category-checkbox-state-changed="updateCategoriesCategoryIsChosenValue"
+                               @event-category-updated="updateCategory"
+                               @event-categories-updated="updateCategories"
 
       />
     </div>
@@ -44,19 +45,24 @@ export default {
           .catch()
     },
 
-    updateCategoriesCategoryIsChosenValue(categoryCheckboxChangeInfo) {
-
-      alert("categoryId: " + categoryCheckboxChangeInfo.categoryId + " categoryIsChosen: " + categoryCheckboxChangeInfo.categoryIsChosen)
-      // const categoryCheckboxChangeInfo = {
-      //   categoryId: categoryId,
-      //   categoryIsChosen: categoryIsChosen
-      // }
-
+    updateCategory(updatedCategory) {
+      for (let i = 0; i < this.categories.length; i++) {
+        if (this.categories[i].categoryId === updatedCategory.categoryId) {
+          this.categories[i].categoryIsChosen = updatedCategory.categoryIsChosen
+          break
+        }
+      }
       // todo: käi for (index) tsükliga läbi this.categories massiiv.
       //  Vaata igal tsüklil  categoryCheckboxChangeInfo.categoryId väärtust
       //  ja võrdle seda kokreetsel tsüklil category objekti välja categoryId vastu
       //  Kui väärtused klapivad, siis muuda selle category objekti välja categoryIsChosen väärtust
       //  vastavalt categoryCheckboxChangeInfo.categoryId väärtusega
+    },
+
+    updateCategories(categoriesAreChosen) {
+      for (let i = 0; i < this.categories.length; i++) {
+        this.categories[i].categoryIsChosen = categoriesAreChosen
+      }
     },
 
   },

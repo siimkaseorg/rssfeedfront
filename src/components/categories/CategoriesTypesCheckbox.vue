@@ -1,17 +1,9 @@
 <template>
-
-<!--  <div class="form-check">-->
-<!--    <input class="form-check-input" type="checkbox" value="" >-->
-<!--    <label class="form-check-label" >-->
-<!--      Kõik kategooria-->
-<!--    </label>-->
-<!--  </div>-->
-
-    <h4>Kõik kategooriad</h4>
-
+  <h4>Kõik kategooriad</h4>
+  <hr>
   <div v-for="category in categories" :key="category.categoryId" class="form-check">
     <input class="form-check-input" type="checkbox" value="" :checked="category.categoryIsChosen">
-    <label class="form-check-label" >
+    <label class="form-check-label">
       {{ category.categoryName }}
     </label>
   </div>

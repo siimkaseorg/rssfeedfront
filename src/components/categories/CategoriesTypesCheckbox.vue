@@ -1,20 +1,23 @@
 <template>
 
+  <div class="mb-3">
+    <div class="form-check">
+      <input @change="updateAllCategories($event.target.checked)" class="form-check-input" type="checkbox" checked>
+      <label class="form-check-label" >
+        Kõik kategooriad
+      </label>
+    </div>
 
-  <div class="form-check">
-    <input @change="updateAllCategories($event.target.checked)" class="form-check-input" type="checkbox" checked>
-    <label class="form-check-label" >
-      Kõik kategooriad
-    </label>
+    <hr>
+    <div v-for="category in categories" :key="category.categoryId" class="form-check">
+      <input @change="updateCategory(category.categoryId, $event.target.checked)" class="form-check-input" type="checkbox" :checked="category.categoryIsChosen">
+      <label class="form-check-label" >
+        {{ category.categoryName }}
+      </label>
+    </div>
   </div>
 
-  <hr>
-  <div v-for="category in categories" :key="category.categoryId" class="form-check">
-    <input @change="updateCategory(category.categoryId, $event.target.checked)" class="form-check-input" type="checkbox" :checked="category.categoryIsChosen">
-    <label class="form-check-label" >
-      {{ category.categoryName }}
-    </label>
-  </div>
+
 
 </template>
 

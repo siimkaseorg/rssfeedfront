@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Kodu vaade</h1>
+    <h1 class="mb-3">Kodu vaade</h1>
   </div>
   <div class="row justify-content-center">
     <div class="col col-2">
@@ -9,7 +9,11 @@
                                @event-categories-updated="updateCategories"
 
       />
+      <!--  todo: vajab implementeerimist    -->
+      <button type="submit" class="btn btn-primary">Otsi</button>
+
     </div>
+
   </div>
 
 
@@ -52,11 +56,6 @@ export default {
           break
         }
       }
-      // todo: käi for (index) tsükliga läbi this.categories massiiv.
-      //  Vaata igal tsüklil  categoryCheckboxChangeInfo.categoryId väärtust
-      //  ja võrdle seda kokreetsel tsüklil category objekti välja categoryId vastu
-      //  Kui väärtused klapivad, siis muuda selle category objekti välja categoryIsChosen väärtust
-      //  vastavalt categoryCheckboxChangeInfo.categoryId väärtusega
     },
 
     updateCategories(categoriesAreChosen) {

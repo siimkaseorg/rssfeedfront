@@ -1,12 +1,23 @@
 <template>
-  <h4>Kõik kategooriad</h4>
-  <hr>
-  <div v-for="category in categories" :key="category.categoryId" class="form-check">
-    <input class="form-check-input" type="checkbox" value="" :checked="category.categoryIsChosen">
-    <label class="form-check-label">
-      {{ category.categoryName }}
-    </label>
+
+  <div class="mb-3">
+    <div class="form-check">
+      <input @change="updateAllCategories($event.target.checked)" class="form-check-input" type="checkbox" checked>
+      <label class="form-check-label" >
+        Kõik kategooriad
+      </label>
+    </div>
+
+    <hr>
+    <div v-for="category in categories" :key="category.categoryId" class="form-check">
+      <input @change="updateCategory(category.categoryId, $event.target.checked)" class="form-check-input" type="checkbox" :checked="category.categoryIsChosen">
+      <label class="form-check-label" >
+        {{ category.categoryName }}
+      </label>
+    </div>
   </div>
+
+
 
 </template>
 
@@ -19,7 +30,22 @@ export default {
   data() {
     return {}
   },
-  methods: {},
+  methods: {
+
+    updateCategory(categoryId, categoryIsChosen) {
+      const updatedCategory = {
+        categoryId: categoryId,
+        categoryIsChosen: categoryIsChosen
+      }
+
+      this.$emit('event-category-updated', updatedCategory)
+    },
+
+    updateAllCategories(categoriesAreChosen) {
+      this.$emit('event-categories-updated', categoriesAreChosen)
+
+    },
+  },
   mounted() {
   }
 }

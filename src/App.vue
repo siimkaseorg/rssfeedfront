@@ -15,6 +15,9 @@
         <div class="col">
           <router-link to="/">Loe hiljem</router-link>
         </div>
+        <div class="col">
+          <router-link to="/login">Logi Sisse</router-link>
+        </div>
 
       </div>
     </div>

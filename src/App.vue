@@ -15,22 +15,20 @@
         <div class="col">
           <router-link to="/">Loe hiljem</router-link>
         </div>
-        <div class="col">
-        <button type="button" class="btn btn-light btn-outline-dark"><router-link to="/">Logi Sisse</router-link></button>
+
       </div>
-      </div>
+    </div>
 
       <hr>
 
+    <div class="container text-center">
       <div class="row">
         <div class="col-md-8">
         </div>
         <div class="col">
           <router-link to="/">Loo konto</router-link>
         </div>
-
       </div>
-
     </div>
 
   </nav>

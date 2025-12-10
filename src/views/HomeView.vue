@@ -1,24 +1,27 @@
 <template>
-  <div class="home">
-    <h1 class="mb-3">Kodu vaade</h1>
-  </div>
-  <div class="row justify-content-center">
-    <div class="col col-2">
-      <CategoriesTypesCheckbox :categories="categories"
-                               @event-category-updated="updateCategory"
-                               @event-categories-updated="updateCategories"
+  <div class="container text-center">
 
-      />
-      <!--  todo: vajab implementeerimist    -->
-      <button @click="findArticles" type="submit" class="btn btn-primary">Otsi</button>
+    <div class="row justify-content-center mb-5">
+      <div class="col col-2">
+        <CategoriesTypesCheckbox :categories="categories"
+                                 @event-category-updated="updateCategory"
+                                 @event-categories-updated="updateCategories"
+
+        />
+        <!--  todo: vajab implementeerimist    -->
+        <button @click="findArticles" type="submit" class="btn btn-primary">Otsi</button>
+
+      </div>
 
     </div>
 
+    <div v-for="article in articles" :key="article.articleId" class="row justify-content-center ">
+      <Article :article="article" class="mb-2"/>
+    </div>
+
+
   </div>
 
-  <div class="col col-2">
-    <Article/>
-  </div>
 
 </template>
 
@@ -74,7 +77,7 @@ export default {
     },
 
     getCategories() {
-     CategoryService.sendGetCategoriesRequest()
+      CategoryService.sendGetCategoriesRequest()
           .then(response => this.handleGetCategoriesResponse(response))
           .catch()
     },
@@ -82,6 +85,7 @@ export default {
     handleGetCategoriesResponse(response) {
       this.categories = response.data
       this.generateChosenCategoryIds()
+      this.findArticles()
     },
 
     generateChosenCategoryIds() {

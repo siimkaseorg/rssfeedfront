@@ -10,4 +10,8 @@ export default {
         router.push({name: 'errorRoute'})
     },
 
+    navigateToFeedSettingsView() {
+        router.push({name: 'feedSettingsRoute'})
+    },
+
 }

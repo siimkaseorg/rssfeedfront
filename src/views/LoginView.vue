@@ -71,7 +71,13 @@ export default {
       sessionStorage.setItem('userId', this.loginResponse.userId)
       sessionStorage.setItem('roleName', this.loginResponse.roleName)
       sessionStorage.setItem('userHasSelectedFeedSettings', this.loginResponse.userHasSelectedFeedSettings)
-      NavigationService.navigateToHomeView()
+
+      if (this.loginResponse.userHasSelectedFeedSettings) {
+        NavigationService.navigateToHomeView();
+      } else {
+        NavigationService.navigateToFeedSettingsView()
+      }
+
     },
 
     handleLoginError(error) {

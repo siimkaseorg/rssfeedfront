@@ -16,6 +16,9 @@
 
   </div>
 
+  <div class="col col-2">
+    <Article/>
+  </div>
 
 </template>
 
@@ -43,7 +46,7 @@ export default {
           categoryIsChosen: true
         }
       ],
-      
+
       articles: [
         {
           articleId: 0,

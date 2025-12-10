@@ -7,15 +7,17 @@
       <CategoriesTypesCheckbox :categories="categories"
                                @event-category-updated="updateCategory"
                                @event-categories-updated="updateCategories"
-
       />
       <!--  todo: vajab implementeerimist    -->
       <button type="submit" class="btn btn-primary">Otsi</button>
-
     </div>
+
 
   </div>
 
+  <div class="col col-2">
+    <Article/>
+  </div>
 
 </template>
 
@@ -24,10 +26,11 @@
 
 import CategoriesTypesCheckbox from "@/components/categories/CategoriesTypesCheckbox.vue";
 import CategoryService from "@/services/CategoryService";
+import Article from "@/components/articles/Article.vue";
 
 export default {
   name: 'HomeView',
-  components: {CategoriesTypesCheckbox},
+  components: {Article, CategoriesTypesCheckbox},
   data() {
     return {
 

@@ -4,10 +4,7 @@
 
 <script>
 export default {
-  name: 'Login',
-  props: {
-    categories: Array
-  },
+  name: 'NewsView',
   data() {
     return {}
   },

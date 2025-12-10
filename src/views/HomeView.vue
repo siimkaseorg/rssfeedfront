@@ -28,10 +28,11 @@
 import CategoriesTypesCheckbox from "@/components/categories/CategoriesTypesCheckbox.vue";
 import CategoryService from "@/services/CategoryService";
 import ArticleService from "@/services/ArticleService";
+import Article from "@/components/articles/Article.vue";
 
 export default {
   name: 'HomeView',
-  components: {CategoriesTypesCheckbox},
+  components: {Article, CategoriesTypesCheckbox},
   data() {
     return {
 

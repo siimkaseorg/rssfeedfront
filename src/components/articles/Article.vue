@@ -31,6 +31,7 @@
 <script>
 import NewsImage from "@/components/image/NewsImage.vue";
 import SessionStorageService from "@/services/SessionStorageService";
+import ReadLaterService from "@/services/ReadLaterService";
 
 export default {
   name: 'Article',
@@ -38,19 +39,6 @@ export default {
   props: {
     article: {}
   },
-  // articles: [
-  //   {
-  //     articleId: 0,
-  //     portalName: '',
-  //     categoryId: 0,
-  //     categoryName: '',
-  //     title: '',
-  //     description: '',
-  //     articleLink: '',
-  //     imageLink: '',
-  //     isInReadList: false
-  //   }
-  // ]
   data() {
     return {}
   },
@@ -62,28 +50,20 @@ export default {
     },
 
     addToReadLater: function (articleId) {
-
-      let isLoggedIn = SessionStorageService.isLoggedIn();
-
-
-      // todo: kontrolli kas kasutaja on sisse logitud
-      if (isLoggedIn) {
-        let userId = sessionStorage.getItem('userId');
-        // todo: käivita backend teenus Post (params: userId, articleId), et lisada artikel kasutaja listi
-        // emiti parentile ('event-article-added-to-read-later', articleId)
-            // parent loopib läbi articles massiivi, ja võrdleb saadetud articleId väärtsust.
-            // kui liab vaste, siis muudab ära kokreetse artikli 'isInReadList' väärtuse 'true'
-      } else  {
-        // kui mitte, siis tee modal lahti, ja ütle, et kui tahad artikleid lisada oma nimekirja, siis logi siis
-        // 2 nuppu
-        // sulge (sulgem modali)
-        // logi sisse (suunab kasutaja login vaatale)
-
+      if (SessionStorageService.isLoggedIn()) {
+        const userId = sessionStorage.getItem('userId');
+        ReadLaterService.addArticleToReadLater(userId, articleId)
+            .then(() => {
+              this.$emit('article-added-to-read-later', articleId);
+            })
+            .catch(error => {
+              console.error("Error adding article to read later list:", error);
+            });
+      } else {
+        alert("Please log in to save articles for later.");
+        // Here you can later implement the modal logic.
       }
-
-
     },
-
   },
   mounted() {
   }

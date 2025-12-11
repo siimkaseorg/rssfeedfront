@@ -16,14 +16,14 @@
       <div class="col col-3">
 
         <div v-for="portalOption in portalOptions" :key="portalOption.portalId + portalOption.portalIsChosen" class="form-check mb-1">
-          <input @change="executePortalCheckboxChange(portalOption, $event.target.checked)" class="form-check-input" type="checkbox" >
+          <input @change="executePortalCheckboxChange(portalOption, $event.target.checked)" class="form-check-input" type="checkbox" :checked="portalOption.portalIsChosen">
           <label class="form-check-label">
             {{ portalOption.portalName }}
           </label>
         </div>
 
         <div class="form-check mb-1">
-          <button type="submit" class="btn btn-outline-success mt-3">Salvesta</button>
+          <button @click="navigateToFeedView" :disabled="isSubmitDisabled" type="submit" class="btn btn-outline-success mt-3">Salvesta</button>
         </div>
 
       </div>
@@ -70,23 +70,31 @@ export default {
           ]
         }
       ]
-
-
+    }
+  },
+  computed: {
+    isSubmitDisabled() {
+      return !this.portalOptions.some(option => option.portalIsChosen);
     }
   },
   methods: {
     executePortalCheckboxChange(portalOption, isChecked) {
       if (isChecked) {
-        sessionStorage.setItem('portalOptions', JSON.stringify(this.portalOptions))
-        this.portalOption = portalOption
-        this.portalOption.portalIsChosen = true
-        this.portalCategoriesModalIsOpen = true
-
+        // Save state before opening modal to allow for cancellation
+        sessionStorage.setItem('portalOptions', JSON.stringify(this.portalOptions));
+        this.portalOption = portalOption;
+        this.portalOption.portalIsChosen = true;
+        this.portalCategoriesModalIsOpen = true;
       } else {
-        this.portalOption.portalIsChosen = isChecked;
+        // When unchecking, update the state for the correct portal
+        portalOption.portalIsChosen = false;
+        // Also clear its selected categories
+        if (portalOption.categoryOptions) {
+          portalOption.categoryOptions.forEach(category => {
+            category.categoryIsChosen = false;
+          });
+        }
       }
-
-
     },
 
     updatePortalCategorySelection(updatedPortalCategorySelection) {
@@ -119,14 +127,23 @@ export default {
 
 
     getPortalOptions() {
-      PortalOptionsService.sendPortalOptionsRequest()
-          .then(response => this.portalOptions = response.data)
+      const savedOptions = localStorage.getItem('portalOptions');
+      if (savedOptions) {
+        this.portalOptions = JSON.parse(savedOptions);
+      } else {
+        PortalOptionsService.sendPortalOptionsRequest()
+            .then(response => this.portalOptions = response.data)
+      }
     },
 
     closePortalCategoriesModal() {
       this.portalCategoriesModalIsOpen = false
     },
 
+    navigateToFeedView() {
+      localStorage.setItem('portalOptions', JSON.stringify(this.portalOptions));
+      this.$router.push({ name: 'feedRoute' });
+    }
   },
   beforeMount() {
     this.getPortalOptions()

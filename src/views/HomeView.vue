@@ -6,28 +6,18 @@
         <CategoriesTypesCheckbox :categories="categories"
                                  @event-category-updated="updateCategory"
                                  @event-categories-updated="updateCategories"
-
         />
-        <!--  todo: vajab implementeerimist    -->
         <button @click="findArticles" type="submit" class="btn btn-primary">Otsi</button>
-
       </div>
-
     </div>
 
     <div v-for="article in articles" :key="article.articleId" class="row justify-content-center ">
       <Article :article="article" class="mb-2"/>
     </div>
-
-
   </div>
-
-
 </template>
 
 <script>
-
-
 import CategoriesTypesCheckbox from "@/components/categories/CategoriesTypesCheckbox.vue";
 import CategoryService from "@/services/CategoryService";
 import ArticleService from "@/services/ArticleService";
@@ -38,54 +28,34 @@ export default {
   components: {Article, CategoriesTypesCheckbox},
   data() {
     return {
-
-      userId: Number(sessionStorage.getItem('userId')),
-
       categoryIds: [],
-
-      categories: [
-        {
-          categoryId: 0,
-          categoryName: '',
-          categoryIsChosen: true
-        }
-      ],
-
-      articles: [
-        {
-          articleId: 0,
-          portalName: '',
-          categoryId: 0,
-          categoryName: '',
-          title: '',
-          description: '',
-          articleLink: '',
-          imageLink: '',
-          isInReadList: true
-        }
-      ]
-
+      categories: [],
+      articles: []
     }
   },
   methods: {
-
     findArticles() {
-      this.generateChosenCategoryIds()
-      ArticleService.sendGetArticlesRequest(this.userId, this.categoryIds)
+      this.generateChosenCategoryIds();
+      // This view should ONLY ever get public articles.
+      ArticleService.getPublicFilteredArticles(this.categoryIds)
           .then(response => this.articles = response.data)
-          .catch()
+          .catch(error => {
+            console.error("Error fetching public articles:", error);
+            this.articles = [];
+          });
     },
 
     getCategories() {
       CategoryService.sendGetCategoriesRequest()
           .then(response => this.handleGetCategoriesResponse(response))
-          .catch()
+          .catch(error => {
+            console.error("Error fetching categories:", error);
+          });
     },
 
     handleGetCategoriesResponse(response) {
-      this.categories = response.data
-      this.generateChosenCategoryIds()
-      this.findArticles()
+      this.categories = response.data;
+      this.findArticles(); // Initial article load after getting categories
     },
 
     generateChosenCategoryIds() {
@@ -95,24 +65,20 @@ export default {
     },
 
     updateCategory(updatedCategory) {
-      for (let i = 0; i < this.categories.length; i++) {
-        if (this.categories[i].categoryId === updatedCategory.categoryId) {
-          this.categories[i].categoryIsChosen = updatedCategory.categoryIsChosen
-          break
-        }
+      const category = this.categories.find(c => c.categoryId === updatedCategory.categoryId);
+      if (category) {
+        category.categoryIsChosen = updatedCategory.categoryIsChosen;
       }
     },
 
     updateCategories(categoriesAreChosen) {
-      for (let i = 0; i < this.categories.length; i++) {
-        this.categories[i].categoryIsChosen = categoriesAreChosen
-      }
+      this.categories.forEach(category => {
+        category.categoryIsChosen = categoriesAreChosen;
+      });
     },
-
-
   },
   beforeMount() {
-    this.getCategories()
+    this.getCategories();
   }
 }
 </script>

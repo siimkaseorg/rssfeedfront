@@ -35,6 +35,7 @@
 import LoginService from "@/services/LoginService";
 import NavigationService from "@/services/NavigationService";
 import AlertDanger from "@/components/alert/AlertDanger.vue";
+import { sessionStore } from "@/services/SessionStore";
 
 export default {
   name: 'LoginView',
@@ -43,15 +44,7 @@ export default {
     return {
       username: '',
       password: '',
-
       alertMessage: '',
-
-      loginResponse: {
-        userId: 0,
-        roleName: '',
-        userHasSelectedFeedSettings: false
-      },
-
       errorResponse:{
         errorCode: 0,
         message: ''
@@ -59,7 +52,6 @@ export default {
     }
   },
   methods: {
-
     executeLogin() {
       LoginService.sendGetLoginRequest(this.username, this.password)
           .then(response => this.handleLoginResponse(response))
@@ -67,19 +59,18 @@ export default {
     },
 
     handleLoginResponse(response) {
-      this.loginResponse = response.data
-      sessionStorage.setItem('userId', this.loginResponse.userId)
-      sessionStorage.setItem('roleName', this.loginResponse.roleName)
-      sessionStorage.setItem('userHasSelectedFeedSettings', this.loginResponse.userHasSelectedFeedSettings)
+      const loginResponse = response.data;
+      sessionStore.login(loginResponse);
 
       this.$emit('event-user-logged-in');
 
-      if (this.loginResponse.userHasSelectedFeedSettings) {
-        NavigationService.navigateToHomeView();
+      if (loginResponse.userHasSelectedFeedSettings) {
+        // Correct: A logged-in user with settings should go to their personal feed.
+        NavigationService.navigateToFeedView();
       } else {
-        NavigationService.navigateToFeedSettingsView()
+        // Correct: A new user must set up their feed first.
+        NavigationService.navigateToFeedSettingsView();
       }
-
     },
 
     handleLoginError(error) {
@@ -90,11 +81,6 @@ export default {
         NavigationService.navigateToErrorView()
       }
     },
-
-
-
   },
-  mounted() {
-  }
 }
 </script>

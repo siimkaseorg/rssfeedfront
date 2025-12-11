@@ -1,6 +1,6 @@
 <template>
   <div class="container text-center">
-    <div v-if="!session.isLoggedIn" class="alert alert-info">
+    <div v-if="!session.isLoggedIn" class="alert alert-warning">
       Please log in to see your "read later" list.
     </div>
     <div v-else-if="articles.length === 0" class="alert alert-info">
@@ -40,16 +40,17 @@ export default {
   },
   methods: {
     fetchReadLaterArticles() {
-      if (this.session.isLoggedIn) {
+      // Only fetch if we are on the correct route and logged in
+      if (this.$route.name === 'readRoute' && this.session.isLoggedIn) {
         ReadLaterService.getReadLaterArticles(this.session.userId)
             .then(response => {
               this.articles = response.data;
             })
             .catch(error => {
               console.error("Error fetching read later articles:", error);
-              this.articles = []; // Clear articles on error
+              this.articles = [];
             });
-      } else {
+      } else if (!this.session.isLoggedIn) {
         this.articles = []; // Clear articles if logged out
       }
     }

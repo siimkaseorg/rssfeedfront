@@ -6,8 +6,11 @@
       </div>
     </div>
 
-    <div v-if="noCategoriesSelected" class="alert alert-info">
-      Please select some categories in the <a href="#" @click.prevent="navigateToFeedSettings">feed settings</a> to see articles.
+    <div v-if="!session.isLoggedIn" class="alert alert-warning">
+      Please log in to see your personalized feed.
+    </div>
+    <div v-else-if="noCategoriesSelected" class="alert alert-info">
+      Please select some categories in the <router-link to="/feed/settings">feed settings</router-link> to build your feed.
     </div>
 
     <div v-for="article in articles" :key="article.articleId" class="row justify-content-center">
@@ -19,21 +22,29 @@
 <script>
 import Article from "@/components/articles/Article.vue";
 import ArticleService from "@/services/ArticleService";
+import { sessionStore } from "@/services/SessionStore";
 
 export default {
   name: 'FeedView',
   components: {Article},
   data() {
     return {
-      userId: Number(sessionStorage.getItem('userId')),
       articles: [],
-      noCategoriesSelected: false
+      noCategoriesSelected: false,
+      session: sessionStore,
     }
   },
-  updateArticleReadLaterStatus(articleId) {
-    const article = this.articles.find(a => a.articleId === articleId);
-    if (article) {
-      article.isInReadList = true;
+  watch: {
+    'session.isLoggedIn': {
+      immediate: true,
+      handler(isLoggedIn) {
+        if (isLoggedIn) {
+          this.loadFilteredArticles();
+        } else {
+          this.articles = [];
+          this.noCategoriesSelected = false;
+        }
+      }
     }
   },
   methods: {
@@ -42,28 +53,28 @@ export default {
     },
     loadFilteredArticles() {
       const savedOptions = localStorage.getItem('portalOptions');
+      let categoryIds = [];
+
       if (savedOptions) {
         const portalOptions = JSON.parse(savedOptions);
-        const categoryIds = portalOptions
+        categoryIds = portalOptions
             .filter(portal => portal.portalIsChosen)
             .flatMap(portal => portal.categoryOptions
                 .filter(category => category.categoryIsChosen)
                 .map(category => category.categoryId)
             );
+      }
 
-        if (categoryIds.length > 0) {
-          this.noCategoriesSelected = false;
-          ArticleService.sendGetArticlesRequest(this.userId, categoryIds)
-              .then(response => {
-                this.articles = response.data;
-              })
-              .catch(error => {
-                console.error("Error fetching articles:", error);
-              });
-        } else {
-          this.articles = [];
-          this.noCategoriesSelected = true;
-        }
+      if (categoryIds.length > 0) {
+        this.noCategoriesSelected = false;
+        ArticleService.getFeedViewArticles(this.session.userId, categoryIds)
+            .then(response => {
+              this.articles = response.data;
+            })
+            .catch(error => {
+              console.error("Error fetching feed articles:", error);
+              this.articles = [];
+            });
       } else {
         this.articles = [];
         this.noCategoriesSelected = true;
@@ -75,9 +86,6 @@ export default {
         article.isInReadList = true;
       }
     }
-  },
-  beforeMount() {
-    this.loadFilteredArticles();
   }
 }
 </script>

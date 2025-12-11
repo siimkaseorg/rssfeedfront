@@ -1,9 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
-import NewsView from "@/views/NewsView.vue";
 import FeedSettingsView from "@/views/FeedSettingsView.vue";
-import ReadView from "@/views/ReadView.vue";
+import FeedView from "@/views/FeedView.vue";
+import LaterReadView from "@/views/LaterReadView.vue";
 import SignUpView from "@/views/SignUpView.vue";
 import ErrorView from "@/views/ErrorView.vue";
 
@@ -20,14 +20,14 @@ const routes = [
         component: LoginView
     },
     {
-        path: '/news',
-        name: 'newsRoute',
-        component: NewsView
-    },
-    {
         path: '/read',
         name: 'readRoute',
-        component: ReadView
+        component: LaterReadView
+    },
+    {
+        path: '/feed',
+        name: 'feedRoute',
+        component: FeedView
     },
     {
         path: '/feed/settings',

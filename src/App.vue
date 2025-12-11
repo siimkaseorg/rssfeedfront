@@ -9,7 +9,7 @@
         </div>
 
         <div class="col">
-          <router-link to="/news">Kõik uudised</router-link>
+          <router-link to="/">Kõik uudised</router-link>
         </div>
         <div class="col">
           <router-link to="/feed">Minu voog</router-link>

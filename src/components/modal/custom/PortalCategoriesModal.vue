@@ -1,4 +1,4 @@
-<template>
+How<template>
   <Modal :modal-is-open="portalCategoriesModalIsOpen" @event-close-modal="$emit('event-close-modal')">
 
     <template #title>

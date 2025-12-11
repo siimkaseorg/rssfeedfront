@@ -30,6 +30,12 @@ export default {
       noCategoriesSelected: false
     }
   },
+  updateArticleReadLaterStatus(articleId) {
+    const article = this.articles.find(a => a.articleId === articleId);
+    if (article) {
+      article.isInReadList = true;
+    }
+  },
   methods: {
     navigateToFeedSettings() {
       this.$router.push({ name: 'feedSettingsRoute' });
